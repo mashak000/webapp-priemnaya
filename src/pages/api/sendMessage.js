@@ -5,15 +5,12 @@ export default async (req, res) => {
     const { message } = req.body;
     const botToken = process.env.BOT_TOKEN;
     const chatId = process.env.CHAT_ID;
-    console.log(message)
-
-
     try {
       const response = await axios.post(
         `https://api.telegram.org/bot${botToken}/sendMessage`,
         {
           chat_id: chatId,
-          text: message
+          text: `Букет ${message.name} за ${message.price} рублей`
         }
       );
       console.log(response);
