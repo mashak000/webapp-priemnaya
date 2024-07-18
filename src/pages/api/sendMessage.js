@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default async (req, res) => {
   if (req.method === "POST") {
-    const { message } = req.body;
+    const { message, userId } = req.body;
     const botToken = process.env.BOT_TOKEN;
     const chatId = process.env.CHAT_ID;
     try {
@@ -13,7 +13,13 @@ export default async (req, res) => {
           text: `Букет ${message.name} за ${message.price} рублей`
         }
       );
-      console.log(response);
+      const response2 = await axios.post(
+        `https://api.telegram.org/bot${botToken}/sendMessage`,
+        {
+          chat_id: userId,
+          text: `Букет ${message.name} за ${message.price} рублей`
+        }
+      );
 
       if (response.status === 200) {
         res.status(200).json({ success: true, data: response.data });

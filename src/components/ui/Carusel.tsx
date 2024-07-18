@@ -21,6 +21,7 @@ export default function Carusel({items}: CaruselProps): JSX.Element {
     const handlers = useSwipeable({
       onSwipedLeft: handleSwipedLeft,
       onSwipedRight: handleSwipedRight,
+      delta: { up: 30, down: 30 }
     });
   
     return (

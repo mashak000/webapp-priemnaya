@@ -18,7 +18,7 @@ export default function FlowerCard({flower}: FlowerCardProps): JSX.Element {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify( {message: flower}),
+            body: JSON.stringify( {message: flower, userId: app.initDataUnsafe.user?.id}),
           })
             .then(response => response.json())
             .then(data => {
