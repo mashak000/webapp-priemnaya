@@ -3,7 +3,37 @@
 @tailwind utilities;
 
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.caruselka {
+  display: flex;
+}
+
+.flower-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.my-button {
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: blue;
+  color: white;
+}
+
+.carouselContainer {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel {
+  display: flex;
+  transition: transform 0.3s ease;
+  width: 100%;
 }

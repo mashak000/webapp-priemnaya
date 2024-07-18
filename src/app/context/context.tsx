@@ -1,25 +1,43 @@
-import React, { createContext, useEffect, useState } from "react";
-import type { TelegramWebApps } from 'telegram-webapps-types-new';
+import Spinner from "@/components/Spinner";
+import React, { createContext, useEffect, useRef, useState } from "react";
+import type { TelegramWebApps } from "telegram-webapps-types-new";
 
 interface IProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-export const webAppContext = createContext<TelegramWebApps.WebApp>({} as TelegramWebApps.WebApp);
+type AppContext = {
+  appRef: React.MutableRefObject<TelegramWebApps.WebApp>;
+  ready: boolean;
+};
+
+export const webAppContext = createContext<AppContext>({
+  appRef: { current: {} } as React.MutableRefObject<TelegramWebApps.WebApp>,
+  ready: false,
+});
 
 export const WebAppProvider = ({ children }: IProps) => {
-    const [app, setApp] = useState({} as TelegramWebApps.WebApp);
+  const appRef = useRef<TelegramWebApps.WebApp>({} as TelegramWebApps.WebApp);
+  const [ready, setReady] = useState(false);
 
-    useEffect(() => {
-        setApp(window.Telegram.WebApp);
-    }, []);
+  useEffect(() => {
+    appRef.current = window.Telegram.WebApp;
+    const webApp = appRef.current;
+    webApp.ready();
+    webApp.expand();
+    webApp.BackButton.show();
+    const handleBackButtonClick = () => {
+      // Logic to navigate to the previous page
+      window.history.back();
+    };
+    // Add the event listener
+    webApp.BackButton.onClick(handleBackButtonClick);
+    setReady(true);
+  }, []);
 
-    useEffect(() => {
-        if (!app) return;
-        if (app.ready) app.ready();
-    }, [app]);
-
-    return (
-        <webAppContext.Provider value={app}>{children}</webAppContext.Provider>
-    );
+  return (
+    <webAppContext.Provider value={{ appRef, ready }}>
+      {ready ? children : <Spinner />}
+    </webAppContext.Provider>
+  );
 };
